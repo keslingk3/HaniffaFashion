@@ -12,6 +12,10 @@
     .cart-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     .fade-in { animation: fadeIn 0.3s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    /* Animasi Kwitansi */
+    @keyframes slideDown { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, -50%); opacity: 1; } }
+    .receipt-modal { animation: slideDown 0.4s ease-out forwards; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen relative overflow-x-hidden">
@@ -162,10 +166,10 @@
     </div>
   </div>
 
-  <!-- Overlay -->
+  <!-- Overlay Umum -->
   <div id="overlay" onclick="closeAllModals()" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden fade-in"></div>
 
-  <!-- FITUR BARU: Modal Checkout (Form Pembelian + COD/Transfer) -->
+  <!-- Modal Checkout -->
   <div id="checkoutModal" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-50 w-11/12 max-w-lg hidden fade-in overflow-hidden max-h-[90vh] flex flex-col">
     <div class="bg-rose-50 p-4 border-b border-rose-100 flex justify-between items-center shrink-0">
       <h3 class="font-bold text-gray-800 text-lg">Formulir Pengiriman</h3>
@@ -202,12 +206,30 @@
           <textarea id="custAddress" required rows="2" placeholder="Nama Jalan, RT/RW, Kecamatan, Kota..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none"></textarea>
         </div>
 
+        <!-- FITUR BARU: Metode Pembayaran (Logika Transfer BSI & Biaya COD) -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">Metode Pembayaran</label>
-          <select id="custMethod" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
+          <select id="custMethod" required onchange="calculateOngkir()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 outline-none">
             <option value="Transfer Bank (BCA)">Transfer Bank (BCA)</option>
+            <option value="Transfer Bank (BSI)">Transfer Bank (BSI)</option>
             <option value="COD (Bayar di Tempat)">COD (Bayar di Tempat)</option>
           </select>
+        </div>
+
+        <!-- Info Bank Otomatis -->
+        <div id="bankInfoBSI" class="hidden bg-blue-50 border border-blue-200 p-3 rounded-lg flex items-center gap-3 fade-in">
+          <div class="w-10 h-8 bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center rounded">BSI</div>
+          <div>
+            <p class="text-xs text-gray-500">Silakan Transfer Ke:</p>
+            <p class="font-mono font-bold text-blue-800 text-sm">7283629346 <span class="text-xs font-normal text-gray-500">(a.n Haniffa Fashion)</span></p>
+          </div>
+        </div>
+        <div id="bankInfoBCA" class="hidden bg-blue-50 border border-blue-200 p-3 rounded-lg flex items-center gap-3 fade-in">
+          <div class="w-10 h-8 bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center rounded">BCA</div>
+          <div>
+            <p class="text-xs text-gray-500">Silakan Transfer Ke:</p>
+            <p class="font-mono font-bold text-blue-800 text-sm">1234567890 <span class="text-xs font-normal text-gray-500">(a.n Haniffa Fashion)</span></p>
+          </div>
         </div>
 
         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mt-4 space-y-2">
@@ -219,6 +241,13 @@
             <span>Ongkos Kirim:</span>
             <span id="coOngkir" class="font-semibold text-gray-800">Rp 0</span>
           </div>
+          
+          <!-- Baris Biaya COD (Hidden By Default) -->
+          <div id="codFeeRow" class="hidden flex justify-between text-sm text-rose-600 fade-in">
+            <span>Biaya Layanan COD:</span>
+            <span class="font-semibold">+ Rp 5.000</span>
+          </div>
+
           <div class="flex justify-between text-base border-t border-gray-200 pt-3 mt-2 font-bold text-gray-800">
             <span>Total Tagihan:</span>
             <span id="coTotal" class="text-rose-600 text-lg">Rp 0</span>
@@ -232,17 +261,67 @@
     </div>
   </div>
 
+  <!-- Overlay Kwitansi (Agar modal kwitansi lebih gelap) -->
+  <div id="receiptOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-80 z-50 hidden fade-in backdrop-blur-sm"></div>
+
+  <!-- FITUR BARU: Modal Kwitansi Khusus COD -->
+  <div id="receiptModal" class="receipt-modal fixed top-1/2 left-1/2 z-[60] w-[350px] bg-white rounded-lg shadow-2xl hidden flex-col overflow-hidden">
+    
+    <!-- Bagian Atas Kwitansi -->
+    <div class="bg-gray-900 p-5 text-center relative border-b-4 border-rose-500">
+      <button onclick="closeReceipt()" class="absolute top-3 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      <div class="w-12 h-12 bg-white rounded-full mx-auto mb-2 flex items-center justify-center text-rose-600 text-xl shadow-lg">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+      </div>
+      <h2 class="text-xl font-extrabold text-white tracking-widest uppercase">Kwitansi COD</h2>
+      <p class="text-[10px] text-gray-400 mt-1">Haniffa Fashion - E-Receipt</p>
+    </div>
+
+    <!-- Bagian Tengah (Garis Putus-putus ala Struk) -->
+    <div class="p-6 bg-white relative">
+      <!-- Ornamen bergerigi (kertas struk) di atas -->
+      <div class="absolute top-[-10px] left-0 w-full h-3 bg-transparent" style="background-image: radial-gradient(circle at 10px 0, transparent 10px, white 11px); background-size: 20px 20px;"></div>
+      
+      <div class="text-center mb-4">
+        <p class="text-xs text-gray-500">Status Pembayaran</p>
+        <p class="text-sm font-bold text-orange-600 bg-orange-100 px-3 py-1 rounded-md inline-block mt-1 uppercase">BELUM LUNAS (Bayar ke Kurir)</p>
+      </div>
+
+      <div class="border-t-2 border-dashed border-gray-200 py-4 my-2 text-sm text-gray-600 space-y-2">
+        <div class="flex justify-between"><span class="font-semibold text-gray-800">Nama:</span> <span id="rName" class="text-right">Rina</span></div>
+        <div class="flex justify-between"><span class="font-semibold text-gray-800">Tanggal:</span> <span id="rDate" class="text-right">10 Jan</span></div>
+        <div class="flex justify-between"><span class="font-semibold text-gray-800">No. Order:</span> <span id="rNo" class="text-right font-mono text-xs">#HNFF-123</span></div>
+      </div>
+
+      <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm">
+        <div class="flex justify-between text-gray-500 mb-1"><span>Subtotal:</span> <span id="rSub">Rp 0</span></div>
+        <div class="flex justify-between text-gray-500 mb-1"><span>Ongkir:</span> <span id="rOng">Rp 0</span></div>
+        <div class="flex justify-between text-rose-500 mb-2"><span>Biaya COD:</span> <span>Rp 5.000</span></div>
+        <div class="flex justify-between border-t border-gray-200 pt-2 font-bold text-gray-900 text-lg">
+          <span>Total:</span> <span id="rTotal">Rp 0</span>
+        </div>
+      </div>
+      
+      <p class="text-center text-[10px] text-gray-400 mt-5 italic">"Mohon siapkan uang pas saat kurir tiba. Terima kasih telah berbelanja."</p>
+    </div>
+
+    <!-- Bagian Bawah -->
+    <div class="p-4 bg-gray-50 border-t border-gray-200">
+      <button onclick="window.print()" class="w-full bg-rose-600 text-white font-bold py-2.5 rounded hover:bg-rose-700 transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-print"></i> Cetak / Simpan Kwitansi
+      </button>
+    </div>
+  </div>
+
   <script>
     let cart = JSON.parse(localStorage.getItem("store_cart")) || [];
     let products = JSON.parse(localStorage.getItem("store_products")) || [];
-    let currentSubtotal = 0; // Variabel global untuk menyimpan subtotal
+    let currentSubtotal = 0; 
 
-    // PERBAIKAN: Konverter Google Drive yang Kebal Blokir
     function formatImageUrl(url) {
       if (!url) return "";
       let idMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
       if (url.includes('drive.google.com') && idMatch) {
-        // Memakai lh3 agar gambar tidak pecah/terblokir CORB di browser
         return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
       }
       return url;
@@ -420,7 +499,7 @@
         });
       }
 
-      currentSubtotal = total; // Simpan untuk kalkulasi Ongkir
+      currentSubtotal = total; 
       document.getElementById("cartCount").innerText = totalQty;
       document.getElementById("cartTotal").innerText = `Rp ${total.toLocaleString('id-ID')}`;
     }
@@ -437,7 +516,6 @@
       document.getElementById("overlay").classList.add("hidden");
     }
 
-    // --- FITUR BARU: LOGIKA CHECKOUT LENGKAP & ONGKIR ---
     function openCheckoutModal() {
       if(cart.length === 0) { alert("Keranjang belanja masih kosong!"); return; }
       
@@ -445,17 +523,39 @@
       document.getElementById("checkoutModal").classList.remove("hidden");
       
       document.getElementById("checkoutForm").reset();
-      calculateOngkir(); // Atur nilai awal perhitungan menjadi 0
+      calculateOngkir(); 
     }
 
+    // --- LOGIKA ONGKIR & METODE PEMBAYARAN KHUSUS ---
     function calculateOngkir() {
       const regionSelect = document.getElementById("custRegion");
+      const methodSelect = document.getElementById("custMethod");
+      
       const ongkirVal = regionSelect.value ? Number(regionSelect.value) : 0;
+      let codFee = 0;
+      
+      // Deteksi UI Bank & COD
+      const bsiInfo = document.getElementById("bankInfoBSI");
+      const bcaInfo = document.getElementById("bankInfoBCA");
+      const codRow = document.getElementById("codFeeRow");
+
+      bsiInfo.classList.add("hidden");
+      bcaInfo.classList.add("hidden");
+      codRow.classList.add("hidden");
+
+      if (methodSelect.value.includes("BSI")) {
+        bsiInfo.classList.remove("hidden");
+      } else if (methodSelect.value.includes("BCA")) {
+        bcaInfo.classList.remove("hidden");
+      } else if (methodSelect.value.includes("COD")) {
+        codRow.classList.remove("hidden");
+        codFee = 5000; // Biaya Layanan COD 5.000
+      }
       
       document.getElementById("coSubtotal").innerText = `Rp ${currentSubtotal.toLocaleString('id-ID')}`;
       document.getElementById("coOngkir").innerText = `Rp ${ongkirVal.toLocaleString('id-ID')}`;
       
-      const grandTotal = currentSubtotal + ongkirVal;
+      const grandTotal = currentSubtotal + ongkirVal + codFee;
       document.getElementById("coTotal").innerText = `Rp ${grandTotal.toLocaleString('id-ID')}`;
     }
 
@@ -470,9 +570,11 @@
       const address = document.getElementById("custAddress").value;
       const method = document.getElementById("custMethod").value;
       
-      const grandTotal = currentSubtotal + ongkirVal;
+      let codFee = 0;
+      if (method.includes("COD")) codFee = 5000;
       
-      // Generate Teks Rincian Pesanan untuk Admin
+      const grandTotal = currentSubtotal + ongkirVal + codFee;
+      
       let itemsText = `Pemesan: ${name}\nNo WA: ${wa}\nWilayah: ${regionName}\nAlamat: ${address}\n\n*Rincian Barang:*\n`;
       cart.forEach((item, idx) => {
         const itemPrice = Number(item.activePrice || item.price || 0);
@@ -481,29 +583,55 @@
         itemsText += `${idx + 1}. ${item.name}${varTxt} (x${item.qty}) - Rp ${sub.toLocaleString('id-ID')}\n`;
       });
       itemsText += `\nOngkir: Rp ${ongkirVal.toLocaleString('id-ID')}`;
+      if(codFee > 0) itemsText += `\nBiaya COD: Rp ${codFee.toLocaleString('id-ID')}`;
       
-      // Simpan Ke Sistem (Bisa Dilihat di Halaman Admin)
       const newOrder = {
         date: new Date().toLocaleString('id-ID'),
         items: itemsText,
         total: grandTotal,
         method: method
       };
+      
       let orders = JSON.parse(localStorage.getItem("store_orders")) || [];
       orders.push(newOrder);
       localStorage.setItem("store_orders", JSON.stringify(orders));
       
-      // Reset dan Tutup
       cart = [];
       saveCart();
       updateCartUI();
       closeAllModals();
       
-      // Tampilkan Konfirmasi Berhasil (Tanpa Buka WhatsApp)
-      alert(`✅ Pesanan Berhasil Dibuat!\n\nTerima kasih Kak ${name}. \nPesanan Anda menggunakan metode ${method} telah masuk ke sistem kami dan sedang diproses. Admin kami akan segera menghubungi nomor WA Anda (${wa}) untuk konfirmasi pengiriman.`);
+      // Jika Transfer, hanya Alert. Jika COD, munculkan Struk Kwitansi
+      if (method.includes("Transfer")) {
+        alert(`✅ Pesanan Berhasil Dibuat!\n\nTerima kasih Kak ${name}. \nPesanan Anda menggunakan metode ${method} telah masuk ke sistem kami dan sedang diproses.`);
+      } else if (method.includes("COD")) {
+        tampilkanKwitansiCOD(name, currentSubtotal, ongkirVal, grandTotal);
+      }
     }
 
-    // --- NOTIFIKASI LIVE PEMBELIAN ---
+    // --- FITUR KWITANSI COD ---
+    function tampilkanKwitansiCOD(nama, subTotal, ongkir, gTotal) {
+      document.getElementById("receiptOverlay").classList.remove("hidden");
+      document.getElementById("receiptModal").classList.remove("hidden");
+      document.getElementById("receiptModal").classList.add("flex");
+
+      const tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      const randomOrderNo = "HNFF-" + Math.floor(Math.random() * 90000 + 10000);
+
+      document.getElementById("rName").innerText = nama;
+      document.getElementById("rDate").innerText = tgl;
+      document.getElementById("rNo").innerText = randomOrderNo;
+      document.getElementById("rSub").innerText = `Rp ${subTotal.toLocaleString('id-ID')}`;
+      document.getElementById("rOng").innerText = `Rp ${ongkir.toLocaleString('id-ID')}`;
+      document.getElementById("rTotal").innerText = `Rp ${gTotal.toLocaleString('id-ID')}`;
+    }
+
+    function closeReceipt() {
+      document.getElementById("receiptOverlay").classList.add("hidden");
+      document.getElementById("receiptModal").classList.add("hidden");
+      document.getElementById("receiptModal").classList.remove("flex");
+    }
+
     let notifCount = 0;
     const maxNotif = 20;
 
