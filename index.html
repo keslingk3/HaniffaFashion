@@ -342,7 +342,7 @@
       return url;
     }
 
-    // FUNGSI LOAD PRODUK DARI FIREBASE ONLINE
+    // FUNGSI LOAD PRODUK DARI FIREBASE ONLINE DENGAN VALIDASI AMAN
     async function loadProducts() {
       const grid = document.getElementById("productGrid");
       const emptyMsg = document.getElementById("emptyMessage");
@@ -354,7 +354,11 @@
         products = [];
         if (data) {
           Object.keys(data).forEach(key => {
-            products.push({ firebaseKey: key, ...data[key] });
+            let item = data[key];
+            // Validasi ketat: pastikan item valid dan memiliki nama produk
+            if (item && typeof item === 'object' && item.name) {
+              products.push({ firebaseKey: key, ...item });
+            }
           });
         }
       } catch (err) {
@@ -412,13 +416,13 @@
         card.innerHTML = `
           <div class="relative overflow-hidden">
             <img id="main-img-${p.id}" src="${safeMainImage}" alt="${p.name}" class="w-full h-60 object-cover bg-gray-100 transition-transform duration-500 group-hover:scale-105">
-            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">${p.category}</span>
+            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">${p.category || 'Produk'}</span>
           </div>
           ${thumbsHtml}
           <div class="p-5 flex-1 flex flex-col justify-between">
             <div>
               <h4 class="font-bold text-lg text-gray-900 leading-tight">${p.name}</h4>
-              <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.description}</p>
+              <p class="text-xs text-gray-500 mt-1 line-clamp-2">${p.description || ''}</p>
               ${variantHtml}
             </div>
             <div class="mt-4 flex items-end justify-between">
