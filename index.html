@@ -199,6 +199,17 @@
     let cart = JSON.parse(localStorage.getItem("store_cart")) || [];
     let products = JSON.parse(localStorage.getItem("store_products")) || [];
 
+    // FUNGSI KONVERSI OTOMATIS GOOGLE DRIVE LINK KE DIRECT IMAGE
+    function formatImageUrl(url) {
+      if (!url) return "";
+      let idMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+      if (url.includes('drive.google.com') && idMatch) {
+        return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+      }
+      return url;
+    }
+
+    // FUNGSI LOAD PRODUK
     function loadProducts() {
       const grid = document.getElementById("productGrid");
       const emptyMsg = document.getElementById("emptyMessage");
@@ -237,9 +248,14 @@
         }
 
         let thumbsHtml = '';
+        let safeMainImage = formatImageUrl(p.image);
+
         if (p.moreImages && Array.isArray(p.moreImages) && p.moreImages.length > 0) {
           let allImgs = [p.image, ...p.moreImages];
-          let thumbs = allImgs.map(img => `<img src="${img}" onmouseover="document.getElementById('main-img-${p.id}').src='${img}'" class="w-10 h-10 object-cover border-2 border-transparent hover:border-rose-400 rounded-md cursor-pointer transition">`).join('');
+          let thumbs = allImgs.map(img => {
+            let safeImg = formatImageUrl(img);
+            return `<img src="${safeImg}" onmouseover="document.getElementById('main-img-${p.id}').src='${safeImg}'" class="w-10 h-10 object-cover border-2 border-transparent hover:border-rose-400 rounded-md cursor-pointer transition">`;
+          }).join('');
           thumbsHtml = `<div class="flex gap-2 p-3 bg-gray-50 border-t border-gray-100 overflow-x-auto">${thumbs}</div>`;
         }
 
@@ -248,7 +264,7 @@
         
         card.innerHTML = `
           <div class="relative overflow-hidden">
-            <img id="main-img-${p.id}" src="${p.image}" alt="${p.name}" class="w-full h-60 object-cover bg-gray-100 transition-transform duration-500 group-hover:scale-105">
+            <img id="main-img-${p.id}" src="${safeMainImage}" alt="${p.name}" class="w-full h-60 object-cover bg-gray-100 transition-transform duration-500 group-hover:scale-105">
             <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">${p.category}</span>
           </div>
           ${thumbsHtml}
@@ -346,9 +362,11 @@
           totalQty += itemQty;
           const varLabel = item.selectedVariant ? `<span class="text-xs text-rose-500 font-semibold bg-rose-50 px-2 py-0.5 rounded ml-1">${item.selectedVariant}</span>` : '';
           
+          let safeImg = formatImageUrl(item.image);
+
           cartItemsContainer.innerHTML += `
             <div class="flex gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-              <img src="${item.image}" class="w-16 h-16 object-cover rounded-lg border border-gray-100">
+              <img src="${safeImg}" class="w-16 h-16 object-cover rounded-lg border border-gray-100">
               <div class="flex-1">
                 <h4 class="text-sm font-bold text-gray-800 leading-tight">${item.name} ${varLabel}</h4>
                 <div class="text-gray-800 text-sm font-semibold mt-1">Rp ${itemPrice.toLocaleString('id-ID')}</div>
@@ -401,7 +419,6 @@
       return { text, total };
     }
 
-    // PENGAMANAN RIWAYAT ORDER: Menyimpan riwayat order ke sistem Admin
     function recordOrderToAdmin(orderData, method) {
       const newOrder = {
         date: new Date().toLocaleString('id-ID'),
@@ -417,8 +434,6 @@
     function checkout(type) {
       if(cart.length === 0) return;
       const order = generateOrderSummary();
-      
-      // Simpan ke Admin
       recordOrderToAdmin(order, 'Tanya Admin (Chat WA)');
       
       const msg = `Halo Admin, saya ingin order pesanan berikut:\n\n${order.text}\n*Total Belanja: Rp ${order.total.toLocaleString('id-ID')}*\n\nMohon info ketersediaan stok & ongkirnya.`;
@@ -427,8 +442,6 @@
 
     function confirmAndNotify() {
       const order = generateOrderSummary();
-      
-      // Simpan ke Admin
       recordOrderToAdmin(order, 'Beli & Transfer (Invoice)');
 
       cart = [];
