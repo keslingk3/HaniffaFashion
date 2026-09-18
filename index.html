@@ -46,9 +46,7 @@
     <div class="flex justify-between items-end mb-8">
       <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-rose-500 pl-3">Koleksi Terbaru</h3>
     </div>
-    
     <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8"></div>
-    
     <div id="emptyMessage" class="hidden text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
       <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i>
       <p class="text-gray-500">Koleksi sedang kosong. Silakan tambahkan produk di Halaman Admin.</p>
@@ -62,9 +60,7 @@
         <h3 class="text-2xl font-bold text-gray-900">Apa Kata Pelanggan Kami?</h3>
         <p class="text-gray-500 text-sm mt-2">Kepuasan Anda adalah prioritas utama Haniffa Fashion</p>
       </div>
-      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Testi 1 -->
         <div class="bg-rose-50/50 p-6 rounded-2xl border border-rose-100 hover:shadow-md transition">
           <div class="flex text-yellow-400 text-xs mb-3 space-x-1">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
@@ -78,7 +74,6 @@
             </div>
           </div>
         </div>
-        <!-- Testi 2 -->
         <div class="bg-rose-50/50 p-6 rounded-2xl border border-rose-100 hover:shadow-md transition">
           <div class="flex text-yellow-400 text-xs mb-3 space-x-1">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
@@ -92,7 +87,6 @@
             </div>
           </div>
         </div>
-        <!-- Testi 3 -->
         <div class="bg-rose-50/50 p-6 rounded-2xl border border-rose-100 hover:shadow-md transition">
           <div class="flex text-yellow-400 text-xs mb-3 space-x-1">
             <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
@@ -136,7 +130,7 @@
     </div>
   </section>
 
-  <!-- Notifikasi Live Pembelian (Pop-up kiri bawah) -->
+  <!-- Notifikasi Live Pembelian -->
   <div id="liveNotification" class="fixed bottom-6 left-4 md:left-6 bg-white p-3 pr-5 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 flex items-center gap-3 transform translate-y-32 opacity-0 transition-all duration-700 ease-in-out z-50 pointer-events-none w-72">
     <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex justify-center items-center shrink-0">
       <i class="fa-solid fa-bag-shopping"></i>
@@ -154,15 +148,12 @@
       <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-cart-shopping mr-2 text-rose-500"></i> Keranjang Saya</h2>
       <button onclick="toggleCart()" class="text-gray-400 hover:text-rose-500"><i class="fa-solid fa-xmark text-xl"></i></button>
     </div>
-    
     <div id="cartItems" class="flex-grow overflow-y-auto p-4 cart-scroll space-y-4"></div>
-
     <div class="p-4 border-t border-gray-200 bg-white">
       <div class="flex justify-between items-center mb-4">
         <span class="text-gray-600">Total Harga:</span>
         <span id="cartTotal" class="text-xl font-bold text-rose-600">Rp 0</span>
       </div>
-      
       <div class="space-y-2">
         <button onclick="checkout('wa')" class="w-full bg-emerald-500 text-white font-semibold py-2.5 rounded-xl hover:bg-emerald-600 transition shadow-sm flex justify-center items-center gap-2">
           <i class="fa-brands fa-whatsapp"></i> Chat Admin (Tanya Stok/Ongkir)
@@ -185,7 +176,6 @@
     </div>
     <div class="p-6">
       <p class="text-sm text-gray-600 mb-4">Transfer sesuai total berikut untuk memproses pesanan Anda:</p>
-      
       <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
         <div class="flex items-center gap-3 mb-2">
           <div class="w-10 h-6 bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center rounded">BCA</div>
@@ -193,12 +183,10 @@
         </div>
         <p class="text-xs text-gray-500">a.n. Haniffa Fashion</p>
       </div>
-
       <div class="flex justify-between items-center mb-6 border-t border-gray-100 pt-4">
         <span class="text-gray-600 font-medium">Total Transfer:</span>
         <span id="transferTotal" class="text-xl font-extrabold text-rose-600">Rp 0</span>
       </div>
-
       <button onclick="confirmAndNotify()" class="w-full bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-700 transition flex justify-center items-center gap-2">
         <i class="fa-solid fa-paper-plane"></i> Selesai & Buat Notifikasi WA
       </button>
@@ -206,12 +194,11 @@
   </div>
 
   <script>
-    const whatsappNo = "6281234567890"; // GANTI NOMOR WA KAMU
+    const whatsappNo = "6281234567890";
     
     let cart = JSON.parse(localStorage.getItem("store_cart")) || [];
     let products = JSON.parse(localStorage.getItem("store_products")) || [];
 
-    // FUNGSI LOAD PRODUK
     function loadProducts() {
       const grid = document.getElementById("productGrid");
       const emptyMsg = document.getElementById("emptyMessage");
@@ -259,7 +246,6 @@
         const card = document.createElement("div");
         card.className = "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group";
         
-        // PERBAIKAN: pointer-events-none ditambahkan ke <i class> agar tidak memblokir tombol klik
         card.innerHTML = `
           <div class="relative overflow-hidden">
             <img id="main-img-${p.id}" src="${p.image}" alt="${p.name}" class="w-full h-60 object-cover bg-gray-100 transition-transform duration-500 group-hover:scale-105">
@@ -284,7 +270,6 @@
       });
     }
 
-    // FUNGSI KERANJANG
     function addToCart(productId) {
       try {
         const product = products.find(p => String(p.id) === String(productId));
@@ -306,10 +291,8 @@
         const basePrice = Number(product.price || 0);
         const discPrice = Number(product.discountPrice || 0);
         const activePrice = (discPrice > 0) ? discPrice : basePrice;
-        
         const cartId = String(product.id) + (selectedVar ? '-' + selectedVar : '');
 
-        // Membersihkan error pada data cart lama
         cart = cart.map(item => {
           if (!item.cartId) item.cartId = String(item.id);
           if (!item.activePrice) item.activePrice = Number(item.price);
@@ -325,11 +308,9 @@
         
         saveCart();
         updateCartUI();
-        
         document.getElementById("cartSidebar").classList.remove("translate-x-full");
         document.getElementById("overlay").classList.remove("hidden");
       } catch (error) {
-        // PERBAIKAN: Pengaman jika data tersendat di cache
         localStorage.removeItem("store_cart");
         cart = [];
         alert("Sistem me-refresh keranjang Anda. Silakan coba klik tombol tambah lagi.");
@@ -363,7 +344,6 @@
 
           total += itemPrice * itemQty;
           totalQty += itemQty;
-          
           const varLabel = item.selectedVariant ? `<span class="text-xs text-rose-500 font-semibold bg-rose-50 px-2 py-0.5 rounded ml-1">${item.selectedVariant}</span>` : '';
           
           cartItemsContainer.innerHTML += `
@@ -421,15 +401,36 @@
       return { text, total };
     }
 
+    // PENGAMANAN RIWAYAT ORDER: Menyimpan riwayat order ke sistem Admin
+    function recordOrderToAdmin(orderData, method) {
+      const newOrder = {
+        date: new Date().toLocaleString('id-ID'),
+        items: orderData.text,
+        total: orderData.total,
+        method: method
+      };
+      let orders = JSON.parse(localStorage.getItem("store_orders")) || [];
+      orders.push(newOrder);
+      localStorage.setItem("store_orders", JSON.stringify(orders));
+    }
+
     function checkout(type) {
       if(cart.length === 0) return;
       const order = generateOrderSummary();
+      
+      // Simpan ke Admin
+      recordOrderToAdmin(order, 'Tanya Admin (Chat WA)');
+      
       const msg = `Halo Admin, saya ingin order pesanan berikut:\n\n${order.text}\n*Total Belanja: Rp ${order.total.toLocaleString('id-ID')}*\n\nMohon info ketersediaan stok & ongkirnya.`;
       window.open(`https://wa.me/${whatsappNo}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
     function confirmAndNotify() {
       const order = generateOrderSummary();
+      
+      // Simpan ke Admin
+      recordOrderToAdmin(order, 'Beli & Transfer (Invoice)');
+
       cart = [];
       saveCart();
       updateCartUI();
@@ -439,22 +440,20 @@
       window.open(`https://wa.me/${whatsappNo}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // FUNGSI NOTIFIKASI LIVE PEMBELIAN (POP-UP) 
-    const dummyNames = ["Seseorang dari Jakarta", "Seseorang dari Bandung", "Seseorang dari Surabaya", "Seseorang dari Yogyakarta", "Seseorang dari Makassar", "Seseorang dari Medan", "Seseorang dari Bali"];
-    const dummyItems = ["Kemeja Oversize Linen", "Dress Silk Premium", "Hijab Pashmina Plisket", "Celana Kulot Highwaist", "Blouse Korean Style"];
-
-    // PERBAIKAN: Menambahkan Limit maksimal 20 notifikasi
     let notifCount = 0;
     const maxNotif = 20;
 
     function triggerLiveNotification() {
-      if (notifCount >= maxNotif) return; // Jika sudah 20x, hentikan pop-up secara diam-diam
+      if (notifCount >= maxNotif) return; 
       notifCount++;
 
       const notifEl = document.getElementById("liveNotification");
       const nameEl = document.getElementById("toastName");
       const prodEl = document.getElementById("toastProduct");
       const timeEl = document.getElementById("toastTime");
+
+      const dummyNames = ["Seseorang dari Jakarta", "Seseorang dari Bandung", "Seseorang dari Surabaya", "Seseorang dari Yogyakarta", "Seseorang dari Makassar", "Seseorang dari Medan", "Seseorang dari Bali"];
+      const dummyItems = ["Kemeja Oversize Linen", "Dress Silk Premium", "Hijab Pashmina Plisket", "Celana Kulot Highwaist", "Blouse Korean Style"];
 
       const rName = dummyNames[Math.floor(Math.random() * dummyNames.length)];
       const rTime = Math.floor(Math.random() * 59) + 1;
@@ -474,7 +473,6 @@
         notifEl.classList.add("translate-y-32", "opacity-0");
       }, 4000);
 
-      // Panggil fungsi ini lagi secara looping dengan jeda acak hanya jika belum 20x
       if (notifCount < maxNotif) {
         setTimeout(triggerLiveNotification, Math.floor(Math.random() * 10000) + 15000);
       }
@@ -483,8 +481,6 @@
     document.addEventListener("DOMContentLoaded", () => {
       loadProducts();
       updateCartUI();
-
-      // Memulai notifikasi pertama setelah 3 detik
       setTimeout(triggerLiveNotification, 3000);
     });
   </script>
