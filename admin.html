@@ -46,6 +46,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Baju</label>
           <input type="text" id="name" required placeholder="Contoh: Kemeja Oversize Linen" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
+        
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
           <select id="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
@@ -55,6 +56,7 @@
             <option value="Jaket">Jaket / Outer</option>
           </select>
         </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Harga Normal</label>
@@ -62,15 +64,42 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Harga Diskon</label>
-            <input type="number" id="discountPrice" placeholder="Kosongkan jika tidak ada" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <input type="number" id="discountPrice" placeholder="Kosongkan jika tdk ada" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
           </div>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Varian (Koma)</label>
-          <input type="text" id="variants" placeholder="Contoh: Hitam M, Hitam L" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+
+        <!-- FITUR BARU: PILIHAN UKURAN -->
+        <div class="border border-rose-100 bg-rose-50/30 p-3 rounded-lg">
+          <label class="block text-sm font-bold text-gray-700 mb-2">Pilih Ukuran Tersedia</label>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg hover:border-rose-300 transition">
+              <input type="checkbox" value="M" class="size-checkbox form-checkbox h-4 w-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+              <span class="ml-2 text-xs font-bold text-gray-700">M</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg hover:border-rose-300 transition">
+              <input type="checkbox" value="L" class="size-checkbox form-checkbox h-4 w-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+              <span class="ml-2 text-xs font-bold text-gray-700">L</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg hover:border-rose-300 transition">
+              <input type="checkbox" value="XL" class="size-checkbox form-checkbox h-4 w-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+              <span class="ml-2 text-xs font-bold text-gray-700">XL</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg hover:border-rose-300 transition">
+              <input type="checkbox" value="XXL" class="size-checkbox form-checkbox h-4 w-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+              <span class="ml-2 text-xs font-bold text-gray-700">XXL</span>
+            </label>
+            <label class="inline-flex items-center cursor-pointer bg-white border border-gray-200 px-2.5 py-1.5 rounded-lg hover:border-rose-300 transition">
+              <input type="checkbox" value="XXXL" class="size-checkbox form-checkbox h-4 w-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer">
+              <span class="ml-2 text-xs font-bold text-gray-700">XXXL</span>
+            </label>
+          </div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Varian Warna / Lainnya (Koma)</label>
+          <input type="text" id="variants" placeholder="Contoh: Hitam, Putih (Boleh kosong)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          <p class="text-[9px] text-gray-400 mt-1 italic">*Jika ukuran & warna diisi, otomatis digabungkan (Cth: Hitam - M)</p>
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar Utama</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar Utama (G-Drive / Link)</label>
           <input type="url" id="image" required placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
         <div>
@@ -81,7 +110,8 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Singkat</label>
           <textarea id="description" rows="3" required placeholder="Bahan katun adem..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
         </div>
-        <button type="submit" class="w-full bg-gray-900 text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-rose-600 transition">Simpan Produk</button>
+        
+        <button type="submit" class="w-full bg-gray-900 text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-rose-600 transition shadow-md">Simpan Produk</button>
       </form>
     </div>
 
@@ -94,7 +124,7 @@
             <tr class="border-b bg-gray-50 text-gray-600">
               <th class="p-3">Info Produk</th>
               <th class="p-3">Harga</th>
-              <th class="p-3">Varian</th>
+              <th class="p-3">Varian/Ukuran</th>
               <th class="p-3 text-center">Aksi</th>
             </tr>
           </thead>
@@ -103,7 +133,7 @@
       </div>
     </div>
 
-    <!-- FITUR BARU: Tabel Rekapan Pesanan -->
+    <!-- Tabel Rekapan Pesanan -->
     <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-emerald-200 mt-2">
       <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
         <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
@@ -122,7 +152,7 @@
             </tr>
           </thead>
           <tbody id="adminOrderTable">
-            <!-- Data Pesanan Masuk ke Sini -->
+            <!-- Data Pesanan Masuk -->
           </tbody>
         </table>
       </div>
@@ -130,10 +160,6 @@
   </main>
 
   <script>
-    // --- 1. SISTEM LOGIN KEAMANAN FRONTEND (BASE64) ---
-    // username "admin" menjadi "YWRtaW4="
-    // password "admin123" menjadi "YWRtaW4xMjM="
-    
     document.addEventListener("DOMContentLoaded", () => {
       if (sessionStorage.getItem('admin_logged_in') === 'true') {
         unlockDashboard();
@@ -161,7 +187,15 @@
       startNotificationScanner();
     }
 
-    // --- 2. MANAJEMEN PRODUK ---
+    function formatImageUrl(url) {
+      if (!url) return "";
+      let idMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+      if (url.includes('drive.google.com') && idMatch) {
+        return `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+      }
+      return url;
+    }
+
     const form = document.getElementById("productForm");
     const tableBody = document.getElementById("adminProductTable");
 
@@ -179,18 +213,19 @@
       products.forEach((p, index) => {
         const discountText = p.discountPrice ? `<br><span class="text-rose-600 font-bold">Diskon: Rp ${Number(p.discountPrice).toLocaleString('id-ID')}</span>` : '';
         const variantText = p.variants && p.variants.length > 0 ? p.variants.join(', ') : '-';
+        const safeImg = formatImageUrl(p.image); 
 
         const row = document.createElement("tr");
         row.className = "border-b hover:bg-gray-50";
         row.innerHTML = `
           <td class="p-3 flex items-center gap-3">
-            <img src="${p.image}" class="w-12 h-12 object-cover rounded-md border border-gray-200">
+            <img src="${safeImg}" class="w-12 h-12 object-cover rounded-md border border-gray-200">
             <div>
               <p class="font-semibold text-gray-800">${p.name}</p>
               <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] uppercase">${p.category}</span>
             </div>
           </td>
-          <td class="p-3">Normal: Rp ${Number(p.price).toLocaleString('id-ID')} ${discountText}</td>
+          <td class="p-3 whitespace-nowrap">Normal: Rp ${Number(p.price).toLocaleString('id-ID')} ${discountText}</td>
           <td class="p-3 text-gray-600 text-xs">${variantText}</td>
           <td class="p-3 text-center">
             <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-xs font-bold border border-red-200 px-2.5 py-1 rounded hover:bg-red-50">Hapus</button>
@@ -202,23 +237,48 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      
+      // Ambil ukuran yang dicentang
+      const sizeCheckboxes = document.querySelectorAll('.size-checkbox:checked');
+      let selectedSizes = Array.from(sizeCheckboxes).map(cb => cb.value);
+
+      // Ambil teks warna 
       const variantsInput = document.getElementById("variants").value;
+      let textVariants = variantsInput ? variantsInput.split(',').map(v => v.trim()).filter(v => v !== '') : [];
+
+      // Logika Penggabungan Otomatis
+      let finalVariants = [];
+      if (selectedSizes.length > 0 && textVariants.length > 0) {
+        textVariants.forEach(color => {
+          selectedSizes.forEach(size => {
+            finalVariants.push(`${color} - ${size}`); // Contoh: "Hitam - M"
+          });
+        });
+      } else if (selectedSizes.length > 0) {
+        finalVariants = selectedSizes;
+      } else if (textVariants.length > 0) {
+        finalVariants = textVariants;
+      }
+
       const moreImagesInput = document.getElementById("moreImages").value;
+
       const newProduct = {
         id: Date.now().toString(),
         name: document.getElementById("name").value,
         category: document.getElementById("category").value,
         price: parseFloat(document.getElementById("price").value),
         discountPrice: document.getElementById("discountPrice").value ? parseFloat(document.getElementById("discountPrice").value) : null,
-        variants: variantsInput ? variantsInput.split(',').map(v => v.trim()).filter(v => v !== '') : [],
+        variants: finalVariants,
         image: document.getElementById("image").value,
         moreImages: moreImagesInput ? moreImagesInput.split(',').map(i => i.trim()).filter(i => i !== '') : [],
         description: document.getElementById("description").value
       };
+
       const products = getProducts();
       products.push(newProduct);
       localStorage.setItem("store_products", JSON.stringify(products));
-      form.reset();
+      
+      form.reset(); // Otomatis menghapus centang checkbox setelah simpan
       renderAdminTable();
       alert("Produk berhasil ditambahkan!");
     });
@@ -232,7 +292,6 @@
       }
     }
 
-    // --- 3. REKAP PESANAN & NOTIFIKASI REAL-TIME ---
     let lastOrderCount = (JSON.parse(localStorage.getItem("store_orders")) || []).length;
 
     function renderOrderHistory() {
@@ -245,7 +304,6 @@
         return;
       }
 
-      // Render dari yang paling baru (reverse)
       orders.slice().reverse().forEach(o => {
         let methodClass = o.method.includes('Transfer') ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700';
         
@@ -253,7 +311,7 @@
           <tr class="border-b hover:bg-emerald-50/30 transition">
             <td class="p-3 text-xs text-gray-500 whitespace-nowrap">${o.date}</td>
             <td class="p-3 text-xs text-gray-700 font-medium whitespace-pre-line leading-relaxed">${o.items}</td>
-            <td class="p-3 font-extrabold text-rose-600">Rp ${Number(o.total).toLocaleString('id-ID')}</td>
+            <td class="p-3 font-extrabold text-rose-600 whitespace-nowrap">Rp ${Number(o.total).toLocaleString('id-ID')}</td>
             <td class="p-3"><span class="${methodClass} font-semibold px-2.5 py-1 rounded-md text-[11px] whitespace-nowrap">${o.method}</span></td>
           </tr>
         `;
@@ -269,13 +327,12 @@
     }
 
     function startNotificationScanner() {
-      // Cek setiap 3 detik apakah ada pesanan baru yang masuk ke database
       setInterval(() => {
         let currentOrders = JSON.parse(localStorage.getItem("store_orders")) || [];
         if(currentOrders.length > lastOrderCount) {
            alert("🔔 ADA PESANAN BARU MASUK! \nSilakan cek tabel Rekap Pesanan.");
            lastOrderCount = currentOrders.length;
-           renderOrderHistory(); // Refresh tabel secara otomatis
+           renderOrderHistory(); 
         }
       }, 3000); 
     }
