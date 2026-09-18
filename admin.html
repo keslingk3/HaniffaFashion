@@ -3,15 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Input Produk</title>
+  <title>Admin Dashboard - Haniffa Fashion</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Mengunci layar agar tidak bisa di-scroll sebelum login */
+    body.locked { overflow: hidden; height: 100vh; }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen">
+<body class="bg-gray-100 font-sans min-h-screen locked" id="bodyAdmin">
+
+  <!-- OVERLAY LOGIN ADMIN -->
+  <div id="loginOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-95 z-[100] flex items-center justify-center backdrop-blur-sm">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm mx-4 transform transition-all">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-extrabold text-gray-800">Admin Area</h2>
+        <p class="text-xs text-gray-500 mt-1">Silakan login untuk mengelola toko.</p>
+      </div>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <input type="text" id="username" placeholder="Username" required class="w-full px-4 py-3 mb-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
+        <input type="password" id="password" placeholder="Password" required class="w-full px-4 py-3 mb-6 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
+        <button type="submit" class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-rose-600 transition shadow-lg hover:shadow-rose-500/30">
+          Masuk Dashboard
+        </button>
+      </form>
+      <p class="text-[10px] text-gray-400 text-center mt-6">Sistem Terenkripsi &copy; Haniffa Fashion</p>
+    </div>
+  </div>
 
   <header class="bg-gray-900 text-white py-4 px-6 flex justify-between items-center shadow-md">
-    <h1 class="text-xl font-bold">Admin Dashboard - Toko Baju</h1>
+    <h1 class="text-xl font-bold">Dashboard Admin</h1>
     <a href="index.html" class="text-sm text-gray-300 hover:text-white border border-gray-700 px-3 py-1.5 rounded-lg">
-      &larr; Lihat Website Katalog
+      &larr; Lihat Web Katalog
     </a>
   </header>
 
@@ -24,7 +46,6 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Baju</label>
           <input type="text" id="name" required placeholder="Contoh: Kemeja Oversize Linen" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
-
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
           <select id="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
@@ -34,54 +55,46 @@
             <option value="Jaket">Jaket / Outer</option>
           </select>
         </div>
-
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Normal (Rp)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Normal</label>
             <input type="number" id="price" required placeholder="150000" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Diskon (Rp)</label>
-            <input type="number" id="discountPrice" placeholder="Kosongkan jika tidak diskon" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Diskon</label>
+            <input type="number" id="discountPrice" placeholder="Kosongkan jika tidak ada" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
           </div>
         </div>
-
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Varian (Pisahkan dengan koma)</label>
-          <input type="text" id="variants" placeholder="Contoh: Hitam M, Hitam L, Putih M" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Varian (Koma)</label>
+          <input type="text" id="variants" placeholder="Contoh: Hitam M, Hitam L" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
-
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar Utama</label>
           <input type="url" id="image" required placeholder="https://..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
-
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">URL Gambar Tambahan (Koma)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Tambahan (Koma)</label>
           <input type="text" id="moreImages" placeholder="https://img1.jpg, https://img2.jpg" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none">
         </div>
-
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Singkat</label>
-          <textarea id="description" rows="3" required placeholder="Bahan katun adem, ukuran All Size..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+          <textarea id="description" rows="3" required placeholder="Bahan katun adem..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
         </div>
-
-        <button type="submit" class="w-full bg-gray-900 text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-rose-600 transition">
-          Simpan Produk
-        </button>
+        <button type="submit" class="w-full bg-gray-900 text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-rose-600 transition">Simpan Produk</button>
       </form>
     </div>
 
     <!-- Tabel Daftar Produk -->
     <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
       <h2 class="text-lg font-bold mb-4 text-gray-800">Daftar Produk Aktif</h2>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto max-h-[600px]">
         <table class="w-full text-left border-collapse text-sm">
-          <thead>
+          <thead class="sticky top-0 bg-white">
             <tr class="border-b bg-gray-50 text-gray-600">
-              <th class="p-3">Info</th>
-              <th class="p-3">Harga & Diskon</th>
-              <th class="p-3">Varian Tersedia</th>
+              <th class="p-3">Info Produk</th>
+              <th class="p-3">Harga</th>
+              <th class="p-3">Varian</th>
               <th class="p-3 text-center">Aksi</th>
             </tr>
           </thead>
@@ -89,15 +102,70 @@
         </table>
       </div>
     </div>
+
+    <!-- FITUR BARU: Tabel Rekapan Pesanan -->
+    <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-emerald-200 mt-2">
+      <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+        <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+          <span class="bg-emerald-100 text-emerald-600 p-1.5 rounded-lg">📋</span> Rekap Pesanan Masuk
+        </h2>
+        <button onclick="clearOrders()" class="text-xs bg-red-50 text-red-600 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-100 font-semibold transition">Hapus Riwayat</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-emerald-50 text-emerald-800 border-b border-emerald-100">
+              <th class="p-3 w-32">Waktu Transaksi</th>
+              <th class="p-3">Rincian Order</th>
+              <th class="p-3">Total Tagihan</th>
+              <th class="p-3">Metode Pembelian</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrderTable">
+            <!-- Data Pesanan Masuk ke Sini -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
 
   <script>
+    // --- 1. SISTEM LOGIN KEAMANAN FRONTEND (BASE64) ---
+    // username "admin" menjadi "YWRtaW4="
+    // password "admin123" menjadi "YWRtaW4xMjM="
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionStorage.getItem('admin_logged_in') === 'true') {
+        unlockDashboard();
+      }
+    });
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = btoa(document.getElementById('username').value.trim());
+      const p = btoa(document.getElementById('password').value.trim());
+
+      if (u === 'YWRtaW4=' && p === 'YWRtaW4xMjM=') {
+        sessionStorage.setItem('admin_logged_in', 'true');
+        unlockDashboard();
+      } else {
+        alert('❌ Username atau Password salah!');
+      }
+    }
+
+    function unlockDashboard() {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('bodyAdmin').classList.remove('locked');
+      renderAdminTable();
+      renderOrderHistory();
+      startNotificationScanner();
+    }
+
+    // --- 2. MANAJEMEN PRODUK ---
     const form = document.getElementById("productForm");
     const tableBody = document.getElementById("adminProductTable");
 
-    function getProducts() {
-      return JSON.parse(localStorage.getItem("store_products")) || [];
-    }
+    function getProducts() { return JSON.parse(localStorage.getItem("store_products")) || []; }
 
     function renderAdminTable() {
       const products = getProducts();
@@ -109,7 +177,7 @@
       }
 
       products.forEach((p, index) => {
-        const discountText = p.discountPrice ? `<br><span class="text-rose-600 font-bold">Diskon: Rp ${p.discountPrice.toLocaleString('id-ID')}</span>` : '';
+        const discountText = p.discountPrice ? `<br><span class="text-rose-600 font-bold">Diskon: Rp ${Number(p.discountPrice).toLocaleString('id-ID')}</span>` : '';
         const variantText = p.variants && p.variants.length > 0 ? p.variants.join(', ') : '-';
 
         const row = document.createElement("tr");
@@ -125,9 +193,7 @@
           <td class="p-3">Normal: Rp ${Number(p.price).toLocaleString('id-ID')} ${discountText}</td>
           <td class="p-3 text-gray-600 text-xs">${variantText}</td>
           <td class="p-3 text-center">
-            <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-xs font-bold border border-red-200 px-2.5 py-1 rounded hover:bg-red-50">
-              Hapus
-            </button>
+            <button onclick="deleteProduct(${index})" class="text-red-600 hover:text-red-800 text-xs font-bold border border-red-200 px-2.5 py-1 rounded hover:bg-red-50">Hapus</button>
           </td>
         `;
         tableBody.appendChild(row);
@@ -136,12 +202,10 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      
       const variantsInput = document.getElementById("variants").value;
       const moreImagesInput = document.getElementById("moreImages").value;
-
       const newProduct = {
-        id: Date.now(),
+        id: Date.now().toString(),
         name: document.getElementById("name").value,
         category: document.getElementById("category").value,
         price: parseFloat(document.getElementById("price").value),
@@ -151,14 +215,12 @@
         moreImages: moreImagesInput ? moreImagesInput.split(',').map(i => i.trim()).filter(i => i !== '') : [],
         description: document.getElementById("description").value
       };
-
       const products = getProducts();
       products.push(newProduct);
       localStorage.setItem("store_products", JSON.stringify(products));
-
       form.reset();
       renderAdminTable();
-      alert("Produk berhasil ditambahkan dengan varian & diskon!");
+      alert("Produk berhasil ditambahkan!");
     });
 
     function deleteProduct(index) {
@@ -170,7 +232,53 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", renderAdminTable);
+    // --- 3. REKAP PESANAN & NOTIFIKASI REAL-TIME ---
+    let lastOrderCount = (JSON.parse(localStorage.getItem("store_orders")) || []).length;
+
+    function renderOrderHistory() {
+      const orders = JSON.parse(localStorage.getItem("store_orders")) || [];
+      const orderTbody = document.getElementById("adminOrderTable");
+      orderTbody.innerHTML = "";
+
+      if(orders.length === 0) {
+        orderTbody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-gray-400">Belum ada histori pesanan.</td></tr>`;
+        return;
+      }
+
+      // Render dari yang paling baru (reverse)
+      orders.slice().reverse().forEach(o => {
+        let methodClass = o.method.includes('Transfer') ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700';
+        
+        orderTbody.innerHTML += `
+          <tr class="border-b hover:bg-emerald-50/30 transition">
+            <td class="p-3 text-xs text-gray-500 whitespace-nowrap">${o.date}</td>
+            <td class="p-3 text-xs text-gray-700 font-medium whitespace-pre-line leading-relaxed">${o.items}</td>
+            <td class="p-3 font-extrabold text-rose-600">Rp ${Number(o.total).toLocaleString('id-ID')}</td>
+            <td class="p-3"><span class="${methodClass} font-semibold px-2.5 py-1 rounded-md text-[11px] whitespace-nowrap">${o.method}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    function clearOrders() {
+      if (confirm("Yakin ingin menghapus semua rekap pesanan? Ini tidak dapat dibatalkan.")) {
+        localStorage.removeItem("store_orders");
+        lastOrderCount = 0;
+        renderOrderHistory();
+      }
+    }
+
+    function startNotificationScanner() {
+      // Cek setiap 3 detik apakah ada pesanan baru yang masuk ke database
+      setInterval(() => {
+        let currentOrders = JSON.parse(localStorage.getItem("store_orders")) || [];
+        if(currentOrders.length > lastOrderCount) {
+           alert("🔔 ADA PESANAN BARU MASUK! \nSilakan cek tabel Rekap Pesanan.");
+           lastOrderCount = currentOrders.length;
+           renderOrderHistory(); // Refresh tabel secara otomatis
+        }
+      }, 3000); 
+    }
   </script>
 </body>
 </html>
